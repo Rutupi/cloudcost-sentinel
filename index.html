@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CloudCost Sentinel</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <span class="brand-mark">CS</span>
+        <div>
+          <strong>CloudCost Sentinel</strong>
+          <span>Autonomous FinOps agent</span>
+        </div>
+      </div>
+      <nav>
+        <a class="active" href="#overview">Overview</a>
+        <a href="#recommendations">Recommendations</a>
+        <a href="#resources">Resources</a>
+        <a href="#agent">AI Agent</a>
+        <a href="#automation">Automation</a>
+      </nav>
+      <section class="agent-card">
+        <span class="status-dot"></span>
+        <div>
+          <strong>Agent online</strong>
+          <p id="lastScanLabel">Last scan completed 3 minutes ago across AWS, GCP, and Azure.</p>
+        </div>
+      </section>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Live cloud estate</p>
+          <h1>Find cloud waste, explain the risk, and queue safe savings.</h1>
+        </div>
+        <div class="actions">
+          <button id="runScan" class="secondary-button" type="button">Run scan</button>
+          <button id="autoPilot" class="primary-button" type="button">Enable safe autopilot</button>
+        </div>
+      </header>
+
+      <section id="overview" class="summary-grid" aria-label="Cost summary">
+        <article class="metric">
+          <span>Monthly spend</span>
+          <strong id="monthlySpend">$0</strong>
+          <small id="spendDelta">Calculating trend</small>
+        </article>
+        <article class="metric positive">
+          <span>Detected savings</span>
+          <strong id="detectedSavings">$0</strong>
+          <small>Awaiting approval</small>
+        </article>
+        <article class="metric">
+          <span>Waste score</span>
+          <strong id="wasteScore">0%</strong>
+          <small>Idle, oversized, and orphaned resources</small>
+        </article>
+        <article class="metric danger">
+          <span>Projected overrun</span>
+          <strong id="overrun">$0</strong>
+          <small>Next 30 days vs budget</small>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <div class="panel forecast-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Predictive spend</p>
+              <h2>30-day forecast</h2>
+            </div>
+            <div class="control-row">
+              <select id="providerFilter" aria-label="Filter provider">
+                <option value="all">All providers</option>
+                <option value="AWS">AWS</option>
+                <option value="GCP">GCP</option>
+                <option value="Azure">Azure</option>
+              </select>
+              <select id="scenarioFilter" aria-label="Forecast scenario">
+                <option value="baseline">Baseline</option>
+                <option value="approved">Approved savings</option>
+                <option value="full">All recommendations</option>
+              </select>
+            </div>
+          </div>
+          <canvas id="forecastChart" width="920" height="320" aria-label="Cloud spend forecast"></canvas>
+          <div class="legend">
+            <span><i class="actual"></i> Actual spend</span>
+            <span><i class="forecast"></i> Forecast</span>
+            <span><i class="budget"></i> Budget</span>
+          </div>
+        </div>
+
+        <div class="panel ai-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AI reasoning</p>
+              <h2>Agent brief</h2>
+            </div>
+            <span id="confidenceBadge">92% confidence</span>
+          </div>
+          <p id="agentBrief"></p>
+          <div class="brief-list" id="briefList"></div>
+        </div>
+      </section>
+
+      <section id="agent" class="panel agent-command-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">AI co-pilot</p>
+            <h2>Ask the agent to focus the investigation</h2>
+          </div>
+          <span id="policyBadge">Policy: approval required above medium risk</span>
+        </div>
+        <div class="command-bar">
+          <label class="sr-only" for="agentCommand">Agent command</label>
+          <input id="agentCommand" type="text" placeholder="Try: show idle gpu, approve low risk, forecast azure" />
+          <button id="runCommand" class="primary-button" type="button">Run command</button>
+        </div>
+        <div id="commandOutput" class="command-output"></div>
+      </section>
+
+      <section id="recommendations" class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Approval workflow</p>
+            <h2>Recommended optimizations</h2>
+          </div>
+          <button id="approveSafe" class="secondary-button" type="button">Approve low risk</button>
+        </div>
+        <div id="recommendationList" class="recommendation-list"></div>
+      </section>
+
+      <section class="split">
+        <div id="resources" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Resource watchlist</p>
+              <h2>Cost anomalies</h2>
+            </div>
+            <input id="resourceSearch" type="search" placeholder="Search service, owner, tag" />
+          </div>
+          <div id="resourceTable" class="resource-table"></div>
+        </div>
+
+        <div id="automation" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Closed-loop actions</p>
+              <h2>Automation queue</h2>
+            </div>
+            <span id="queueCount">0 pending</span>
+          </div>
+          <div id="automationTimeline" class="timeline"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
